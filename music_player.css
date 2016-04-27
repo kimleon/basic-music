@@ -1,83 +1,46 @@
-html {
-  background-color: #eee;
-}
-
 body {
-	font-family: 'Quicksand', sans-serif;
-/*	color: gray;*/
-/*	padding-left: 15px;
-	padding-right: 15px;*/
+    font-family: 'Quicksand', sans-serif;
+    padding: 15px;
 }
 
 h3 {
-	color: black;
+    color: black;
 }
 
 .column {
-	float: left;
-	width: 25%;
-	padding-right: 20px;
+    float: left;
+    width: 25%;
+    padding-right: 20px;
 }
 
 #col-upload {
-	width: 40%;
+    width: 40%;
 }
 
 #url-input {
-	width: 300px;
+    width: 300px;
 }
 
 #all-songs-list > li {
-	cursor: pointer;
-}
-
-#all-songs-list > li:hover {
-	color: blue;
-}
-
-#choosing-songs {
-	display: none;
-}
-
-#all-songs-withcheck {
-	display: none;
-}
-
-#playlists-list > ol > li {
-	cursor: pointer;
-}
-
-#playlists-list > ol > li:hover {
-	color: blue;
-}
-
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    border: 1px solid #e7e7e7;
-    background-color: #f3f3f3;
-}
-
-li {
-    float: right;
-}
-
-li a {
-    display: block;
-    color: #666;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
     cursor: pointer;
 }
 
-li a:hover:not(.active) {
-    background-color: #ddd;
+#all-songs-list > li:hover {
+    color: blue;
 }
 
-li a.active {
-    color: white;
-    background-color: #4CAF50;
+#choosing-songs {
+    display: none;
+}
+
+#all-songs-withcheck {
+    display: none;
+}
+
+#playlists-list > ol > li {
+    cursor: pointer;
+}
+
+#playlists-list > ol > li:hover {
+    color: blue;
 }
