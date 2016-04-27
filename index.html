@@ -47,16 +47,49 @@
           };
       }
 
-      function displayTokenInfo() {
-          // Fetch stored info it it's available.
-          var access_token = localStorage.getItem('access_token');
-          var scope = localStorage.getItem('scope');
+      // function displayTokenInfo() {
+      //     // Fetch stored info it it's available.
+      //     var access_token = localStorage.getItem('access_token');
+      //     var scope = localStorage.getItem('scope');
 
-          // Populate the page's token info.
-          $("#access_token").text(access_token);
-          $("#scope").text(scope);
+      //     // Populate the page's token info.
+      //     $("#access_token").text(access_token);
+      //     $("#scope").text(scope);
+      // }
+
+
+      function buttonWithName(name) {
+        return $("<button />", {
+                  type: "button",
+                  class: "btn btn-default btn-sm pull-right",
+                  text: name,
+                })
       }
 
+      function refreshRepos() {
+        var view = $("#interactive_part");
+        var before = $("#before-auth-instr");
+        view.find("h1 .username").text(localStorage.getItem('username'));
+        view.show();
+        before.hide();
+        $.ajax({
+          url: buildURL("/api/v1/repos/"),
+          type: 'GET',
+          beforeSend: function(xhr){
+              xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('access_token'));
+              // xhr.setRequestHeader('Accept-Encoding', 'gzip');
+          },
+          dataType: 'json',
+        })
+        .fail(function(xhr, status, error) {
+          console.log("refreshRepos failed");
+        })
+        .done(function(data, status, xhr) {
+          console.log(data.repos);
+          $(document).data('repos', data.repos);
+          // displayRepos();
+        })
+      }
 
       $(document).ready(function() {
 
@@ -77,7 +110,7 @@
               console.log(params);
           }
 
-          displayTokenInfo();
+          // displayTokenInfo();
 
           // Request authorization button
           $("#request").click(function() {
@@ -100,7 +133,7 @@
                   localStorage.removeItem(keys[i]);
               };
               // Show that they've been cleared.
-              displayTokenInfo();
+              // displayTokenInfo();
           });
 
 
@@ -167,48 +200,53 @@
     </nav>
 
     <h1>Multi-Source Music Player</h1>
+    <br>
+    <h3 id="before-auth-instr">Sign into DataHub to create playlists and play your music</h3>
 
-    <audio controls id="mp3-player"></audio>
+    <div id="interactive_part" style="display: none;">
+      <h1>Hi, <span class="username"></span></h1>       
+      <audio controls id="mp3-player"></audio>
 
-    <div id="all-columns">
-      <div id="col-upload" class="column">
-        <h3>Select Song by URL</h3>
-        <!-- example url: http://www.culturedub.com/assets/04-Forward.mp3 -->
-        <!-- http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3 -->
-        <!-- http://www.stephaniequinn.com/Music/Jazz%20Rag%20Ensemble%20-%2010.mp3 -->
-        <input type="url" id="url-input" accept=".mp3">
-        <button id="url-submit">Submit Song</button>
+      <div id="all-columns">
+        <div id="col-upload" class="column">
+          <h3>Select Song by URL</h3>
+          <!-- example url: http://www.culturedub.com/assets/04-Forward.mp3 -->
+          <!-- http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3 -->
+          <!-- http://www.stephaniequinn.com/Music/Jazz%20Rag%20Ensemble%20-%2010.mp3 -->
+          <input type="url" id="url-input" accept=".mp3">
+          <button id="url-submit">Submit Song</button>
 
-        <br>
+          <br>
 
-        <h3>Select Song from Your Local Music</h3>
-        <p>on a Mac, iTunes mp3 files are located at Home/Music/iTunes/iTunes Media/Music </p>
+          <h3>Select Song from Your Local Music</h3>
+          <p>on a Mac, iTunes mp3 files are located at Home/Music/iTunes/iTunes Media/Music </p>
 
-        <input type="file" id="itunes-upload" accept=".mp3">
-      </div>
+          <input type="file" id="itunes-upload" accept=".mp3">
+        </div>
 
-      <div id="songs-col" class="column">
-        <div id="all-songs-nocheck">
-          <h3>All Songs</h3>
-          <ol id="all-songs-list">
+        <div id="songs-col" class="column">
+          <div id="all-songs-nocheck">
+            <h3>All Songs</h3>
+            <ol id="all-songs-list">
+            </ol>
+          </div>
+          <div id="all-songs-withcheck">
+            <h3>Name your Playlist:</h3>
+            <form id="playlist-name">
+              <input id="name-input" type="text" name="playlist-name"><br>
+            </form>
+            <h3>Select Songs to Add to this Playlist:</h3>
+            <form id="songs-checkform"></form>
+          </div>
+        </div>
+
+        <div id="playlists-col" class="column">
+          <h3>Your Playlists</h3>
+          <button id="new-playlist">New Playlist</button>
+          <div id="choosing-songs"><button id="create-playlist">Create Playlist</button> <button id="cancel-playlist">Cancel</button></div>
+          <ol id="playlists-list">
           </ol>
         </div>
-        <div id="all-songs-withcheck">
-          <h3>Name your Playlist:</h3>
-          <form id="playlist-name">
-            <input id="name-input" type="text" name="playlist-name"><br>
-          </form>
-          <h3>Select Songs to Add to this Playlist:</h3>
-          <form id="songs-checkform"></form>
-        </div>
-      </div>
-
-      <div id="playlists-col" class="column">
-        <h3>Your Playlists</h3>
-        <button id="new-playlist">New Playlist</button>
-        <div id="choosing-songs"><button id="create-playlist">Create Playlist</button> <button id="cancel-playlist">Cancel</button></div>
-        <ol id="playlists-list">
-        </ol>
       </div>
     </div>
 
