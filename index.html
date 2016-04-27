@@ -23,7 +23,8 @@
           if (params !== undefined && Object.keys(params).length > 0) {
               query = "?" + $.param(params)
           }
-          return base_url + path + query;
+          console.log(base_url + path + query)
+          //return base_url + path + query;
       }
 
       $(document).ready(function() {
@@ -56,7 +57,7 @@
                   "redirect_uri": redirect_uri
               };
               var authorization_url = buildURL("/oauth2/authorize/", params);
-              window.location.href = authorization_url;
+              //window.location.href = authorization_url;
           });
 
           // Clear authorization button
