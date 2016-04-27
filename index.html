@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>DH Music Player</title>
+    <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
+    <link href="jquery/css/ui-lightness/jquery-ui-1.10.0.custom.css" rel="stylesheet" />
+    <link href="music_player.css" rel="stylesheet" />
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+
+    <script type="text/javascript">
+      var base_url = "https://datahub.csail.mit.edu";
+      var client_id = "zz60BO1ibRbEhd5sHgHaWr2Y66GADuuTIQClquZ4";
+      // var redirect_uri = "https://web.mit.edu/jander/www/dh/";
+
+      // Convenience function to build DataHub URL strings
+      // Expects a path starting with a slash. If a params object is present,
+      // it encodes and appends that as query parameters.
+      function buildURL(path, params) {
+          query = "";
+          if (params !== undefined && Object.keys(params).length > 0) {
+              query = "?" + $.param(params)
+          }
+          return base_url + path + query;
+      }
+
+      $(document).ready(function() {
+
+          // Pull the access token from the URL hash if it's available.
+          // Overwrite whatever's currently in storage.
+          if (window.location.hash.length > 1) {
+              params = paramsFromQuery(window.location.hash.substring(1));
+              if (params['access_token']) {
+                  keys = ['access_token', 'scope'];
+                  for (var i = keys.length - 1; i >= 0; i--) {
+                      console.log("Trying " + keys[i]);
+                      saveIfSet(params, keys[i]);
+                  }
+                  // Clear the hash after handling the access_token.
+                  // Just setting window.location.hash = "" leaves a dangling #.
+                  // history.replaceState("", document.title, window.location.pathname + window.location.search);
+              }
+              console.log(params);
+          }
+
+          // displayTokenInfo();
+
+          // Request authorization button
+          $("#request").click(function() {
+              var params = {
+                  "response_type": "token",
+                  "scope": "read write",
+                  "client_id": client_id,
+                  // "redirect_uri": redirect_uri
+              };
+              var authorization_url = buildURL("/oauth2/authorize/", params);
+              window.location.href = authorization_url;
+          });
+
+          // Clear authorization button
+          $("#clear").click(function() {
+              keys = ['access_token', 'scope'];
+              for (var i = keys.length - 1; i >= 0; i--) {
+                  localStorage.removeItem(keys[i]);
+              };
+              // Show that they've been cleared.
+              displayTokenInfo();
+          });
+
+          // $(".api-link").click(function(event) {
+          //   var link = $(this);
+          //   link.next().html("<pre>...</pre>");
+          //   $.ajax({
+          //     url: buildURL(link.text()),
+          //     type: 'GET',
+          //     beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('access_token'));},
+          //     dataType: 'json',
+          //   })
+          //   .fail(function(xhr, status, error) {
+          //     console.log("failed");
+          //     link.next().html("<pre>" + xhr.status + " " + xhr.statusText + "</pre>");
+          //   })
+          //   .done(function(data, status, xhr) {
+          //     console.log("success");
+          //     link.next().html("<pre>" + JSON.stringify(data, null, 2) + "</pre>");
+          //   })
+            
+          // });
+
+
+          // $.ajax({
+          //   url: buildURL("/api/v1/user/"),
+          //   type: 'GET',
+          //   beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('access_token'));},
+          //   dataType: 'json',
+          // })
+          // .fail(function(xhr, status, error) {
+          //   console.log("failed");
+          // })
+          // .done(function(data, status, xhr) {
+          //   localStorage.setItem('username', data.username);
+          //   refreshRepos();
+          // })
+
+      });
+    </script>
+  </head>
+  <body>
+    <script src="jquery/js/jquery-1.9.0.min.js"></script>
+    <script src="jquery/js/jquery-ui-1.10.0.custom.min.js"></script>
+    <script src="music_player.js"></script>
+
+    <ul class="navbar-right">
+      <li>
+        <a id="clear" class="btn btn-link">Clear Auth</a>
+      </li>
+      <li>
+        <a id="request" class="btn btn-link">Request Auth</a>
+      </li>
+    </ul>
+
+    <h1>Multi-Source Music Player</h1>
+
+    <audio controls id="mp3-player"></audio>
+
+    <div id="all-columns">
+      <div id="col-upload" class="column">
+        <h3>Select Song by URL</h3>
+        <!-- example url: http://www.culturedub.com/assets/04-Forward.mp3 -->
+        <!-- http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3 -->
+        <!-- http://www.stephaniequinn.com/Music/Jazz%20Rag%20Ensemble%20-%2010.mp3 -->
+        <input type="url" id="url-input" accept=".mp3">
+        <button id="url-submit">Submit Song</button>
+
+        <br>
+
+        <h3>Select Song from Your Local Music</h3>
+        <p>on a Mac, iTunes mp3 files are located at Home/Music/iTunes/iTunes Media/Music </p>
+
+        <input type="file" id="itunes-upload" accept=".mp3">
+      </div>
+
+      <div id="songs-col" class="column">
+        <div id="all-songs-nocheck">
+          <h3>All Songs</h3>
+          <ol id="all-songs-list">
+          </ol>
+        </div>
+        <div id="all-songs-withcheck">
+          <h3>Name your Playlist:</h3>
+          <form id="playlist-name">
+            <input id="name-input" type="text" name="playlist-name"><br>
+          </form>
+          <h3>Select Songs to Add to this Playlist:</h3>
+          <form id="songs-checkform"></form>
+        </div>
+      </div>
+
+      <div id="playlists-col" class="column">
+        <h3>Your Playlists</h3>
+        <button id="new-playlist">New Playlist</button>
+        <div id="choosing-songs"><button id="create-playlist">Create Playlist</button> <button id="cancel-playlist">Cancel</button></div>
+        <ol id="playlists-list">
+        </ol>
+      </div>
+    </div>
+
+  </body>
+</html>

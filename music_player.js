@@ -1,0 +1,142 @@
+
+$(function() {
+	var itunes_mp3 = document.getElementById("itunes-upload");
+	var music_source = document.getElementById('mp3-player');
+	var url_source = document.getElementById('url-input');
+	var all_list = document.getElementById("all-songs-list");
+  var name_input = document.getElementById("name-input");
+  var songs_checkform = document.getElementById("songs-checkform");
+  var new_playlist_button = document.getElementById("new-playlist");
+  var create_playlist_buttons = document.getElementById("choosing-songs");
+  var songs_nocheck = document.getElementById("all-songs-nocheck");
+  var songs_withcheck = document.getElementById("all-songs-withcheck");
+  var playlists_list = document.getElementById("playlists-list");
+	var current_mp3;
+  var url_songs = {};
+	var all_songs = [];
+
+	$('#itunes-upload').change(function(){
+    if (itunes_mp3.files.length == 0) {
+    } else {
+      var file = itunes_mp3.files[0];
+      update_song_file(file)
+    }
+  });
+
+	$('#url-submit').click(function() {
+		var url = url_source.value;
+		update_song_url(url);
+    var testRE = url.match("[assets|Music]/(.*).mp3");
+    song_title = decodeURI(testRE[1])
+		add_new_song(song_title, url);
+		$('#url-input').val('');
+	});
+
+  $('#all-songs-list').click(function(e) {
+    if(e.target && e.target.nodeName == "LI") {
+      music_source.src = e.target.getAttribute('url');
+      console.log(e.target.getAttribute('url') + " was clicked");
+    }
+  });
+
+  $('#playlists-list').click(function(e) {
+    if(e.target && e.target.nodeName == "LI") {
+      music_source.src = e.target.getAttribute('url');
+      console.log(e.target.getAttribute('url') + " was clicked");
+    }
+  });
+
+  $('#new-playlist').click(function() {
+    new_playlist_button.style.display = "none";
+    create_playlist_buttons.style.display = "block";
+    songs_nocheck.style.display = "none";
+    songs_withcheck.style.display = "block";
+  });
+
+  $('#create-playlist').click(function() {
+    new_playlist_button.style.display = "block";
+    create_playlist_buttons.style.display = "none";
+    songs_nocheck.style.display = "block";
+    songs_withcheck.style.display = "none";
+    var playlist_title = name_input.value;
+    var playlist_songs = [];
+    $("input:checkbox:checked").each(function () {
+        playlist_songs.push($(this).val());
+    });
+
+    var title = document.createElement("H4");             
+    var t = document.createTextNode(playlist_title);    
+    title.appendChild(t); 
+
+    var playlist_ordered = document.createElement('ol');
+    for(var i = 0; i < playlist_songs.length; i++) {
+      var item = document.createElement('li');
+      item.appendChild(document.createTextNode(playlist_songs[i]));
+      var mp3_url = document.createAttribute("url");       
+      mp3_url.value = url_songs[playlist_songs[i]];  
+      item.setAttributeNode(mp3_url); 
+      playlist_ordered.appendChild(item);
+    }
+
+    playlists_list.appendChild(title);
+    playlists_list.appendChild(playlist_ordered);  
+
+    clear_fields(); 
+  });
+
+  $('#cancel-playlist').click(function() {
+    new_playlist_button.style.display = "block";
+    create_playlist_buttons.style.display = "none";
+    songs_nocheck.style.display = "block";
+    songs_withcheck.style.display = "none";
+    clear_fields();
+  });
+
+  clear_fields = function() {
+    name_input.value = "";
+    $("input:checkbox").each(function () {
+      $(this).context.checked = false;
+    });
+  }
+
+	update_song_url = function(url) {
+		current_mp3 = url;
+		all_songs.push(current_mp3);
+		var src = document.createElement("SOURCE");
+    src.setAttribute("src", url);
+    src.setAttribute("type", "audio/mp3");
+    music_source.appendChild(src);
+	}
+
+  update_song_file = function(file) {
+  	current_mp3 = file;
+  	all_songs.push(current_mp3);
+  	music_source.src = file.name;
+    if ('name' in file) {
+      console.log("name: " + file.name);
+    }
+    if ('size' in file) {
+      console.log("size: " + file.size);
+    }
+  }
+
+  add_new_song = function(song_name, song_url) {
+    url_songs[song_name] = song_url;
+		var new_song = document.createElement('li');
+		new_song.appendChild(document.createTextNode(song_name));
+    var mp3_url = document.createAttribute("url");       
+    mp3_url.value = song_url;  
+    new_song.setAttributeNode(mp3_url); 
+		all_list.appendChild(new_song);
+
+    var song_input = document.createElement("INPUT");
+    song_input.setAttribute("type", "checkbox");
+    song_input.setAttribute("value", song_name);
+    var song_label = document.createTextNode(song_name);
+    var br = document.createElement('br');
+    songs_checkform.appendChild(song_input);
+    songs_checkform.appendChild(song_label);
+    songs_checkform.appendChild(br);
+	}
+
+});
