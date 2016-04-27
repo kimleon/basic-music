@@ -53,7 +53,7 @@
                   "response_type": "token",
                   "scope": "read write",
                   "client_id": client_id,
-                  // "redirect_uri": redirect_uri
+                  "redirect_uri": redirect_uri
               };
               var authorization_url = buildURL("/oauth2/authorize/", params);
               window.location.href = authorization_url;
