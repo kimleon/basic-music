@@ -67,10 +67,10 @@
       }
 
       function refreshRepos() {
-        var view = $("#interactive_part");
+        var usernameGreet = $("#interactive_part.username");
         var before = $("#before-auth-instr");
-        view.find("h1 .username").text(localStorage.getItem('username'));
-        view.find("h1 .username").show();
+        usernameGreet.text(localStorage.getItem('username'));
+        usernameGreet.show();
         before.hide();
         $.ajax({
           url: buildURL("/api/v1/repos/"),
