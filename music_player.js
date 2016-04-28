@@ -69,6 +69,8 @@ $(function() {
   });
 
 	$('#url-submit').click(function() {
+    console.log("url submit top")
+    console.log(player)
 		var url = url_source.value;
     if (url.substr(url.length - 4) == ".mp3") {
       update_song_url(url);
