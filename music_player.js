@@ -14,6 +14,7 @@ $(function() {
 	var current_mp3;
   var url_songs = {};
 	var all_songs = [];
+  var player;
 
 
   // 2. This code loads the IFrame Player API code asynchronously.
@@ -25,12 +26,11 @@ $(function() {
 
   // 3. This function creates an <iframe> (and YouTube player)
   //    after the API code downloads.
-  var player;
   function onYouTubeIframeAPIReady() {
     player = new YT.Player('YTplayer', {
       height: '273',
       width: '448',
-      display: 'none',
+      // display: 'none',
       videoId: 'i4ooH8frBWg',
       events: {
         'onReady': onPlayerReady,
