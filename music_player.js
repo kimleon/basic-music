@@ -72,7 +72,7 @@ $(function() {
 
 	$('#url-submit').click(function() {
 		var url = url_source.value;
-    if (url.substr(id.length - 4) == ".mp3") {
+    if (url.substr(url.length - 4) == ".mp3") {
       update_song_url(url);
       var testRE = url.match("[assets|Music]/(.*).mp3");
       song_title = decodeURI(testRE[1])
