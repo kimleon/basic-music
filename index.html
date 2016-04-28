@@ -70,7 +70,7 @@
         var view = $("#interactive_part");
         var before = $("#before-auth-instr");
         view.find("h1 .username").text(localStorage.getItem('username'));
-        view.show();
+        view.find("h1 .username").show();
         before.hide();
         $.ajax({
           url: buildURL("/api/v1/repos/"),
@@ -203,8 +203,8 @@
     <br>
     <h3 id="before-auth-instr">Sign into DataHub to create playlists and play your music</h3>
 
-    <div id="interactive_part" style="display: none;">
-      <h1>Hi, <span class="username"></span></h1>       
+    <div id="interactive_part">
+      <h1 id="dhUserAuthed" style="display: none;">Hi, <span class="username"></span></h1>       
       <div id="all-columns">
         <div id="col-upload" class="column">
           <audio controls id="mp3-player"></audio>
@@ -238,18 +238,18 @@
             }
 
             // 4. The API will call this function when the video player is ready.
-            function onPlayerReady(event) {
-              event.target.playVideo();
-            }
+            // function onPlayerReady(event) {
+            //   event.target.playVideo();
+            // }
 
             // 5. The API calls this function when the player's state changes.
             //    The function indicates that when playing a video (state=1),
             //    the player should play for six seconds and then stop.
             var done = false;
             function onPlayerStateChange(event) {
-              if (event.data == YT.PlayerState.PLAYING && !done) {
-                setTimeout(stopVideo, 6000);
-                done = true;
+              if(event.data === 0) {          
+                alert('done');
+                // go onto the next song in the playlist
               }
             }
             function stopVideo() {
