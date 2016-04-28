@@ -60,8 +60,6 @@ $(function() {
   }
 
 
-
-
 	$('#itunes-upload').change(function(){
     if (itunes_mp3.files.length == 0) {
     } else {
@@ -79,6 +77,7 @@ $(function() {
       add_new_song(song_title, url, "mp3");
       $('#url-input').val('');
     } else if (url.substr(32) !== "https://www.youtube.com/watch?v=" || url.substr(31) !== "http://www.youtube.com/watch?v=") {
+      console.log(player)
       update_yt_url(url);
       var videoID = decodeURI(url.match("watch?v=/(.*)")[1]);
       console.log("videoID: "+videoID)
