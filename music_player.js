@@ -15,6 +15,53 @@ $(function() {
   var url_songs = {};
 	var all_songs = [];
 
+
+  // 2. This code loads the IFrame Player API code asynchronously.
+  var tag = document.createElement('script');
+
+  tag.src = "https://www.youtube.com/iframe_api";
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+  // 3. This function creates an <iframe> (and YouTube player)
+  //    after the API code downloads.
+  var player;
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player('YTplayer', {
+      height: '273',
+      width: '448',
+      display: 'none',
+      videoId: 'i4ooH8frBWg',
+      events: {
+        'onReady': onPlayerReady,
+        'onStateChange': onPlayerStateChange
+      }
+    });
+  }
+
+  // 4. The API will call this function when the video player is ready.
+  function onPlayerReady(event) {
+    // event.target.playVideo();
+    console.log("player ready")
+  }
+
+  // 5. The API calls this function when the player's state changes.
+  //    The function indicates that when playing a video (state=1),
+  //    the player should play for six seconds and then stop.
+  var done = false;
+  function onPlayerStateChange(event) {
+    if(event.data === 0) {          
+      console.log('video done');
+      // go onto the next song in the playlist
+    }
+  }
+  function stopVideo() {
+    player.stopVideo();
+  }
+
+
+
+
 	$('#itunes-upload').change(function(){
     if (itunes_mp3.files.length == 0) {
     } else {
@@ -34,6 +81,7 @@ $(function() {
     } else if (url.substr(32) !== "https://www.youtube.com/watch?v=" || url.substr(31) !== "http://www.youtube.com/watch?v=") {
       update_yt_url(url);
       var videoID = decodeURI(url.match("watch?v=/(.*)")[1]);
+      console.log("videoID: "+videoID)
       add_new_song(song_title, videoID, "youtube");
       $('#url-input').val('');
     } else {
@@ -108,6 +156,11 @@ $(function() {
     });
   }
 
+  update_yt_url = function(ytID) {
+    player.cueVideoById(ytID);
+    player.show();
+  }
+
 	update_song_url = function(url) {
 		current_mp3 = url;
 		all_songs.push(current_mp3);
@@ -150,5 +203,6 @@ $(function() {
     songs_checkform.appendChild(song_label);
     songs_checkform.appendChild(br);
 	}
+
 
 });
