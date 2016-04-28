@@ -69,7 +69,7 @@
       function refreshRepos() {
         var userGreet = $("#dhUserAuthed");
         var before = $("#before-auth-instr");
-        userGreet.text(localStorage.getItem('username'));
+        userGreet.find(".username").text(localStorage.getItem('username'));
         userGreet.show();
         before.hide();
         $.ajax({
