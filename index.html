@@ -136,14 +136,61 @@
 
     <h1>Multi-Source Music Player</h1>
 
-    <audio controls id="mp3-player"></audio>
-
     <div id="all-columns">
       <div id="col-upload" class="column">
-        <h3>Select Song by URL</h3>
+        <audio controls id="mp3-player"></audio>
+        <br>
+
+        <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
+        <div id="YTplayer"></div>
+
+        <script>
+          // 2. This code loads the IFrame Player API code asynchronously.
+          var tag = document.createElement('script');
+
+          tag.src = "https://www.youtube.com/iframe_api";
+          var firstScriptTag = document.getElementsByTagName('script')[0];
+          firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+          // 3. This function creates an <iframe> (and YouTube player)
+          //    after the API code downloads.
+          var player;
+          function onYouTubeIframeAPIReady() {
+            player = new YT.Player('YTplayer', {
+              height: '273',
+              width: '448',
+              videoId: 'i4ooH8frBWg',
+              events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+              }
+            });
+          }
+
+          // 4. The API will call this function when the video player is ready.
+          function onPlayerReady(event) {
+            event.target.playVideo();
+          }
+
+          // 5. The API calls this function when the player's state changes.
+          //    The function indicates that when playing a video (state=1),
+          //    the player should play for six seconds and then stop.
+          var done = false;
+          function onPlayerStateChange(event) {
+            if (event.data == YT.PlayerState.PLAYING && !done) {
+              setTimeout(stopVideo, 6000);
+              done = true;
+            }
+          }
+          function stopVideo() {
+            player.stopVideo();
+          }
+        </script>
+        <h3>Select Song by YouTube or mp3 URL</h3>
         <!-- example url: http://www.culturedub.com/assets/04-Forward.mp3 -->
         <!-- http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3 -->
         <!-- http://www.stephaniequinn.com/Music/Jazz%20Rag%20Ensemble%20-%2010.mp3 -->
+        <!--   https://www.youtube.com/watch?v=i4ooH8frBWg -->
         <input type="url" id="url-input" accept=".mp3">
         <button id="url-submit">Submit Song</button>
 
