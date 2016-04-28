@@ -25,11 +25,20 @@ $(function() {
 
 	$('#url-submit').click(function() {
 		var url = url_source.value;
-		update_song_url(url);
-    var testRE = url.match("[assets|Music]/(.*).mp3");
-    song_title = decodeURI(testRE[1])
-		add_new_song(song_title, url);
-		$('#url-input').val('');
+    if (url.substr(id.length - 4) == ".mp3") {
+      update_song_url(url);
+      var testRE = url.match("[assets|Music]/(.*).mp3");
+      song_title = decodeURI(testRE[1])
+      add_new_song(song_title, url, "mp3");
+      $('#url-input').val('');
+    } else if (url.substr(32) !== "https://www.youtube.com/watch?v=" || url.substr(31) !== "http://www.youtube.com/watch?v=") {
+      update_yt_url(url);
+      var videoID = decodeURI(url.match("watch?v=/(.*)")[1]);
+      add_new_song(song_title, videoID, "youtube");
+      $('#url-input').val('');
+    } else {
+      console.log("not mp3 or youtube url")
+    }
 	});
 
   $('#all-songs-list').click(function(e) {
@@ -120,13 +129,16 @@ $(function() {
     }
   }
 
-  add_new_song = function(song_name, song_url) {
+  add_new_song = function(song_name, song_url, type) {
     url_songs[song_name] = song_url;
 		var new_song = document.createElement('li');
 		new_song.appendChild(document.createTextNode(song_name));
     var mp3_url = document.createAttribute("url");       
     mp3_url.value = song_url;  
     new_song.setAttributeNode(mp3_url); 
+    var url_type = document.createAttribute("url_type");       
+    url_type.value = type;  
+    new_song.setAttributeNode(url_type); 
 		all_list.appendChild(new_song);
 
     var song_input = document.createElement("INPUT");

@@ -228,6 +228,7 @@
               player = new YT.Player('YTplayer', {
                 height: '273',
                 width: '448',
+                display: 'none',
                 videoId: 'i4ooH8frBWg',
                 events: {
                   'onReady': onPlayerReady,
@@ -260,15 +261,15 @@
           <!-- http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3 -->
           <!-- http://www.stephaniequinn.com/Music/Jazz%20Rag%20Ensemble%20-%2010.mp3 -->
           <!--   https://www.youtube.com/watch?v=i4ooH8frBWg -->
-          <input type="url" id="url-input" accept=".mp3">
+          <input type="url" id="url-input">
           <button id="url-submit">Submit Song</button>
 
-          <br>
+          <!-- <br> -->
 
-          <h3>Select Song from Your Local Music</h3>
+          <!-- <h3>Select Song from Your Local Music</h3>
           <p>on a Mac, iTunes mp3 files are located at Home/Music/iTunes/iTunes Media/Music </p>
 
-          <input type="file" id="itunes-upload" accept=".mp3">
+          <input type="file" id="itunes-upload" accept=".mp3"> -->
         </div>
 
         <div id="songs-col" class="column">
