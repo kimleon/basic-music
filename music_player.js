@@ -136,6 +136,10 @@ $(function() {
     mp3_player.style.display = "block";
     current_mp3 = url;
     all_songs.push(current_mp3);
+    if (mp3player.hasChildNodes()) {
+      mp3player.removeChild(mp3player.lastChild);
+    }
+    mp3_player.parentNode.removeChild(mp3_player);
     var src = document.createElement("SOURCE");
     src.setAttribute("src", url);
     src.setAttribute("type", "audio/mp3");
