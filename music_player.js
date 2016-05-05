@@ -33,6 +33,7 @@ $(function() {
       $.getJSON( "https://www.googleapis.com/youtube/v3/videos?part=id%2Csnippet&id="+split_url[1]+"&key=AIzaSyAq29wjl5DIIRoBwnDePV6SJXtgcGM-VhQ", function( data ) {
        //var obj = $.parseJSON(data);
         yt_title = data.items[0].snippet.localized.title;
+        console.log(url)
         console.log(yt_title);
       });
       add_new_song(yt_title, embed_url, "youtube");
