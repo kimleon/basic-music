@@ -151,9 +151,6 @@ $(function() {
 
 });
 
-var YTplayer = document.getElementById("youtube-video");
-var mp3player = document.getElementById('mp3-player');
-
 var player;
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('youtube-video', {
@@ -174,6 +171,8 @@ function onPlayerStateChange() {
 }
 
 play_yt_video = function(url) {
+  var YTplayer = document.getElementById("youtube-video");
+  var mp3player = document.getElementById('mp3-player');
   YTplayer.style.display = "block";
   mp3player.style.display = "none";
   console.log("visible yt player")
