@@ -139,6 +139,7 @@ $(function() {
     mp3_player.src = url;
     mp3_player.load();
     mp3_player.currentTime = 0;
+    mp3_player.play();
   }
 
   add_new_song = function(song_name, song_url, type) {
@@ -191,6 +192,7 @@ update_yt_video = function(url) {
   mp3player.style.display = "none";
   console.log("visible yt player")
   YTplayer.src=url;
+  YTplayer.playVideo();
   console.log("should have set url: "+url)
 }
 
