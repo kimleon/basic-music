@@ -14,7 +14,8 @@ $(function() {
   var url_songs = {};
   var all_songs = [];
 
-
+  // submitting a song adds the song to the "All Songs" list
+  // and puts that song up as the current one on the screen
   $('#url-submit').click(function() {
     var url = url_source.value.trim();
     if (url.substr(url.length - 4) == ".mp3") {
@@ -42,6 +43,7 @@ $(function() {
     }
   });
 
+  // clicking on a song in the "All Songs" List plays the song
   $('#all-songs-list').click(function(e) {
     if(e.target && e.target.nodeName == "LI") {
       var url = e.target.getAttribute('url');
@@ -50,6 +52,7 @@ $(function() {
     }
   });
 
+  // clicking on a song in a playlist plays the song
   $('#playlists-list').click(function(e) {
     if(e.target && e.target.nodeName == "LI") {
       var url = e.target.getAttribute('url');
@@ -87,8 +90,11 @@ $(function() {
       item.appendChild(document.createTextNode(playlist_songs[i]));
       var song_url = document.createAttribute("url");     
       var url_type = document.createAttribute("url_type");     
-      song_url.value = url_songs[playlist_songs[i]];  
+      var song_data = url_songs[playlist_songs[i]]; 
+      song_url.value =  song_data[0];
+      url_type.value =  song_data[1];
       item.setAttributeNode(song_url); 
+      item.setAttributeNode(url_type); 
       playlist_ordered.appendChild(item);
     }
 
@@ -149,7 +155,7 @@ $(function() {
   }
 
   add_new_song = function(song_name, song_url, type) {
-    url_songs[song_name] = song_url;
+    url_songs[song_name] = [song_url, type];
     var new_song = document.createElement('li');
     new_song.appendChild(document.createTextNode(song_name));
     var mp3_url = document.createAttribute("url");       
