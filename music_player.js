@@ -1,5 +1,4 @@
 $(function() {
-  var itunes_mp3 = document.getElementById("itunes-upload");
   var mp3_player = document.getElementById('mp3-player');
   var YT_player = document.getElementById("youtube-video");
   var url_source = document.getElementById('url-input');
@@ -15,14 +14,6 @@ $(function() {
   var url_songs = {};
   var all_songs = [];
 
-
-  $('#itunes-upload').change(function(){
-    if (itunes_mp3.files.length == 0) {
-    } else {
-      var file = itunes_mp3.files[0];
-      update_song_file(file)
-    }
-  });
 
   $('#url-submit').click(function() {
     var url = url_source.value;
