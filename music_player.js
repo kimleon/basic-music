@@ -150,6 +150,7 @@ $(function() {
     current_mp3 = file;
     all_songs.push(current_mp3);
     mp3_player.src = file.name;
+    mp3_player.load();
     if ('name' in file) {
       console.log("name: " + file.name);
     }
