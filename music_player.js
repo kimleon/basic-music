@@ -28,21 +28,12 @@ $(function() {
       var split_url = url.split('watch?v=');
       var embed_url = split_url[0]+'embed/'+split_url[1];
       console.log(embed_url)
-      var q = 'https://www.googleapis.com/youtube/v3/videos?id='+split_url[1]+'&key=AIzaSyAq29wjl5DIIRoBwnDePV6SJXtgcGM-VhQ&fields=items(snippet(title))&part=snippet';
-      $.ajax({
-        url: q, 
-        dataType: "jsonp",
-        success: function(data){
-                 console.log(data)
-                 var title = data.items[0].snippet.title;
-                 console.log(title);
-                 add_new_song(title, embed_url, "youtube");           
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert (textStatus, + ' | ' + errorThrown);
-        }
+      // var q = 'https://www.googleapis.com/youtube/v3/videos?id='+split_url[1]+'&key=AIzaSyAq29wjl5DIIRoBwnDePV6SJXtgcGM-VhQ&fields=items(snippet(title))&part=snippet';
+      $.getJSON( "https://www.googleapis.com/youtube/v3/videos?part=id%2Csnippet&id="+split_url[1]+"&key=AIzaSyAq29wjl5DIIRoBwnDePV6SJXtgcGM-VhQ", function( data ) {
+       //var obj = $.parseJSON(data);
+        console.log(data.items[0].snippet.localized.title);
       });
-
+      add_new_song("youtube title placeholder", embed_url, "youtube");
       play_yt_video(embed_url);
       $('#url-input').val(''); 
     } else {
