@@ -132,9 +132,9 @@ $(function() {
   }
 
   update_mp3_url = function(url) {
+    YT_player.stopVideo();
     YT_player.style.display = "none";
     mp3_player.style.display = "block";
-    YT_player.pauseVideo();
     current_mp3 = url;
     all_songs.push(current_mp3);
     mp3_player.src = url;
