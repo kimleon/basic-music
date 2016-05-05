@@ -28,10 +28,22 @@ $(function() {
       var split_url = url.split('watch?v=');
       var embed_url = split_url[0]+'embed/'+split_url[1];
       console.log(embed_url)
-      add_new_song("YouTube test title", embed_url, "youtube");
-      // play_yt_video(url.split('watch?v=')[1]);
+      var q = 'https://www.googleapis.com/youtube/v3/videos?id='+split_url[1]+'&key=AIzaSyAq29wjl5DIIRoBwnDePV6SJXtgcGM-VhQ&fields=items(snippet(title))&part=snippet';
+      $.ajax({
+        url: q, 
+        dataType: "jsonp",
+        success: function(data){
+                 var title = data.items[0].snippet.title;
+                 console.log(title);
+                 add_new_song(title, embed_url, "youtube");           
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert (textStatus, + ' | ' + errorThrown);
+        }
+      });
+
       play_yt_video(embed_url);
-      $('#url-input').val('');
+      $('#url-input').val(''); 
     } else {
       console.log("not mp3 or youtube url")
     }
