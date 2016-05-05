@@ -139,7 +139,6 @@ $(function() {
     if (mp3_player.hasChildNodes()) {
       mp3_player.removeChild(mp3_player.lastChild);
     }
-    mp3_player.parentNode.removeChild(mp3_player);
     var src = document.createElement("SOURCE");
     src.setAttribute("src", url);
     src.setAttribute("type", "audio/mp3");
