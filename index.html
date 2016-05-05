@@ -14,7 +14,6 @@
       var base_url = "https://datahub.csail.mit.edu";
       var client_id = "zz60BO1ibRbEhd5sHgHaWr2Y66GADuuTIQClquZ4";
       var redirect_uri = "http://kimleon.github.io/basic-music/";
-
       // Convenience function to build DataHub URL strings
       // Expects a path starting with a slash. If a params object is present,
       // it encodes and appends that as query parameters.
@@ -25,7 +24,6 @@
           }
           return base_url + path + query;
       }
-
       // Convenience function to convert a query string into an associative
       // array.
       function paramsFromQuery(query) {
@@ -37,7 +35,6 @@
           }
           return params;
       }
-
       // Convenience function to copy a value to localStorage if it exists in
       // an associate array.
       function saveIfSet(assocArray, key) {
@@ -46,18 +43,14 @@
               localStorage.setItem(key, assocArray[key]);
           };
       }
-
       // function displayTokenInfo() {
       //     // Fetch stored info it it's available.
       //     var access_token = localStorage.getItem('access_token');
       //     var scope = localStorage.getItem('scope');
-
       //     // Populate the page's token info.
       //     $("#access_token").text(access_token);
       //     $("#scope").text(scope);
       // }
-
-
       function buttonWithName(name) {
         return $("<button />", {
                   type: "button",
@@ -65,7 +58,6 @@
                   text: name,
                 })
       }
-
       function refreshRepos() {
         var userGreet = $("#dhUserAuthed");
         var before = $("#before-auth-instr");
@@ -90,9 +82,7 @@
           // displayRepos();
         })
       }
-
       $(document).ready(function() {
-
           // Pull the access token from the URL hash if it's available.
           // Overwrite whatever's currently in storage.
           if (window.location.hash.length > 1) {
@@ -109,9 +99,7 @@
               }
               console.log(params);
           }
-
           // displayTokenInfo();
-
           // Request authorization button
           $("#request").click(function() {
               console.log("requesting auth")
@@ -124,7 +112,6 @@
               var authorization_url = buildURL("/oauth2/authorize/", params);
               window.location.href = authorization_url;
           });
-
           // Clear authorization button
           $("#clear").click(function() {
               console.log("clearing auth")
@@ -135,8 +122,6 @@
               // Show that they've been cleared.
               // displayTokenInfo();
           });
-
-
           $(".api-link").click(function(event) {
             var link = $(this);
             link.next().html("<pre>...</pre>");
@@ -156,8 +141,6 @@
             })
             
           });
-
-
           $.ajax({
             url: buildURL("/api/v1/user/"),
             type: 'GET',
@@ -171,7 +154,6 @@
             localStorage.setItem('username', data.username);
             refreshRepos();
           })
-
       });
     </script>
   </head>
@@ -210,58 +192,15 @@
           <audio controls id="mp3-player"></audio>
           <br>
 
-          <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
-          <div id="YTplayer"></div>
+          <iframe id="youtube-video" width="448" height="273" src="https://www.youtube.com/embed/M7lc1UVf-VE?enablejsapi=1" frameborder="0" enablejsapi="1" allowfullscreen style="display: none;"></iframe>
 
-          <script>
-            // 2. This code loads the IFrame Player API code asynchronously.
-            var tag = document.createElement('script');
-
-            tag.src = "https://www.youtube.com/iframe_api";
-            var firstScriptTag = document.getElementsByTagName('script')[0];
-            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-            // 3. This function creates an <iframe> (and YouTube player)
-            //    after the API code downloads.
-            var player;
-            function onYouTubeIframeAPIReady() {
-              player = new YT.Player('YTplayer', {
-                height: '273',
-                width: '448',
-                display: none,
-                videoId: 'i4ooH8frBWg',
-                events: {
-                  'onReady': onPlayerReady,
-                  'onStateChange': onPlayerStateChange
-                }
-              });
-            }
-
-            // 4. The API will call this function when the video player is ready.
-            function onPlayerReady(event) {
-              // event.target.playVideo();
-              console.log("player ready")
-            }
-
-            // 5. The API calls this function when the player's state changes.
-            //    The function indicates that when playing a video (state=1),
-            //    the player should play for six seconds and then stop.
-            var done = false;
-            function onPlayerStateChange(event) {
-              if(event.data === 0) {          
-                console.log('video done');
-                // go onto the next song in the playlist
-              }
-            }
-            function stopVideo() {
-              player.stopVideo();
-            }
-          </script>
           <h3>Select Song by YouTube or mp3 URL</h3>
-          <!-- example url: http://www.culturedub.com/assets/04-Forward.mp3 -->
+          <!-- http://www.culturedub.com/assets/04-Forward.mp3 -->
           <!-- http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3 -->
           <!-- http://www.stephaniequinn.com/Music/Jazz%20Rag%20Ensemble%20-%2010.mp3 -->
-          <!--   https://www.youtube.com/watch?v=i4ooH8frBWg -->
+          <!-- http://hz.imslp.info/files/imglnks/usimg/a/ad/IMSLP109725-PMLP10229-brahms_Op108.mp3 -->
+          <!-- https://www.youtube.com/watch?v=i4ooH8frBWg -->
+          <!-- https://www.youtube.com/watch?v=i4ooH8frBWg -->
           <input type="url" id="url-input">
           <button id="url-submit">Submit Song</button>
 
@@ -269,7 +208,6 @@
 
           <!-- <h3>Select Song from Your Local Music</h3>
           <p>on a Mac, iTunes mp3 files are located at Home/Music/iTunes/iTunes Media/Music </p>
-
           <input type="file" id="itunes-upload" accept=".mp3"> -->
         </div>
 
