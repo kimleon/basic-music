@@ -143,6 +143,7 @@ $(function() {
     src.setAttribute("src", url);
     src.setAttribute("type", "audio/mp3");
     mp3_player.appendChild(src);
+    mp3_player.currentTime = 0;
   }
 
   update_song_file = function(file) {
