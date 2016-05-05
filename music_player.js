@@ -1,6 +1,7 @@
 $(function() {
   var itunes_mp3 = document.getElementById("itunes-upload");
-  var music_source = document.getElementById('mp3-player');
+  var mp3_player = document.getElementById('mp3-player');
+  var YT_player = document.getElementById("youtube-video");
   var url_source = document.getElementById('url-input');
   var all_list = document.getElementById("all-songs-list");
   var name_input = document.getElementById("name-input");
@@ -47,14 +48,14 @@ $(function() {
 
   $('#all-songs-list').click(function(e) {
     if(e.target && e.target.nodeName == "LI") {
-      music_source.src = e.target.getAttribute('url');
+      mp3_player.src = e.target.getAttribute('url');
       console.log(e.target.getAttribute('url') + " was clicked");
     }
   });
 
   $('#playlists-list').click(function(e) {
     if(e.target && e.target.nodeName == "LI") {
-      music_source.src = e.target.getAttribute('url');
+      mp3_player.src = e.target.getAttribute('url');
       console.log(e.target.getAttribute('url') + " was clicked");
     }
   });
@@ -113,18 +114,20 @@ $(function() {
   }
 
   update_song_url = function(url) {
+    YT_player.style.display = "none";
+    mp3_player.style.display = "block";
     current_mp3 = url;
     all_songs.push(current_mp3);
     var src = document.createElement("SOURCE");
     src.setAttribute("src", url);
     src.setAttribute("type", "audio/mp3");
-    music_source.appendChild(src);
+    mp3_player.appendChild(src);
   }
 
   update_song_file = function(file) {
     current_mp3 = file;
     all_songs.push(current_mp3);
-    music_source.src = file.name;
+    mp3_player.src = file.name;
     if ('name' in file) {
       console.log("name: " + file.name);
     }
@@ -157,7 +160,8 @@ $(function() {
 
 });
 
-
+var YTplayer = document.getElementById("youtube-video");
+var mp3player = document.getElementById('mp3-player');
 
 var player;
 function onYouTubeIframeAPIReady() {
@@ -179,8 +183,8 @@ function onPlayerStateChange() {
 }
 
 play_yt_video = function(url) {
-  var YTplayer = document.getElementById("youtube-video");
   YTplayer.style.display = "block";
+  mp3player.style.display = "none";
   console.log("visible yt player")
   YTplayer.src=url;
   console.log("should have set url: "+url)
