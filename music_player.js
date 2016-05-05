@@ -16,7 +16,7 @@ $(function() {
 
 
   $('#url-submit').click(function() {
-    var url = url_source.value;
+    var url = url_source.value.trim();
     if (url.substr(url.length - 4) == ".mp3") {
       update_mp3_url(url);
       var testRE = url.match("[assets|Music]/(.*).mp3");
