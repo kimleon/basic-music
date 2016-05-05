@@ -136,27 +136,9 @@ $(function() {
     mp3_player.style.display = "block";
     current_mp3 = url;
     all_songs.push(current_mp3);
-    if (mp3_player.hasChildNodes()) {
-      mp3_player.removeChild(mp3_player.lastChild);
-    }
-    var src = document.createElement("SOURCE");
-    src.setAttribute("src", url);
-    src.setAttribute("type", "audio/mp3");
-    mp3_player.appendChild(src);
-    mp3_player.currentTime = 0;
-  }
-
-  update_song_file = function(file) {
-    current_mp3 = file;
-    all_songs.push(current_mp3);
-    mp3_player.src = file.name;
+    mp3_player.src = url;
     mp3_player.load();
-    if ('name' in file) {
-      console.log("name: " + file.name);
-    }
-    if ('size' in file) {
-      console.log("size: " + file.size);
-    }
+    mp3_player.currentTime = 0;
   }
 
   add_new_song = function(song_name, song_url, type) {
