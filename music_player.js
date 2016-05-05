@@ -132,7 +132,6 @@ $(function() {
   }
 
   update_mp3_url = function(url) {
-    YT_player.stopVideo();
     YT_player.style.display = "none";
     mp3_player.style.display = "block";
     current_mp3 = url;
@@ -140,7 +139,6 @@ $(function() {
     mp3_player.src = url;
     mp3_player.load();
     mp3_player.currentTime = 0;
-    mp3_player.play();
   }
 
   add_new_song = function(song_name, song_url, type) {
@@ -189,12 +187,10 @@ function onPlayerStateChange() {
 update_yt_video = function(url) {
   var YTplayer = document.getElementById("youtube-video");
   var mp3player = document.getElementById('mp3-player');
-  mp3player.pause();
   YTplayer.style.display = "block";
   mp3player.style.display = "none";
   console.log("visible yt player")
   YTplayer.src=url;
-  YTplayer.playVideo();
   console.log("should have set url: "+url)
 }
 
