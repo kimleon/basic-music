@@ -1,9 +1,8 @@
-
 $(function() {
-	var itunes_mp3 = document.getElementById("itunes-upload");
-	var music_source = document.getElementById('mp3-player');
-	var url_source = document.getElementById('url-input');
-	var all_list = document.getElementById("all-songs-list");
+  var itunes_mp3 = document.getElementById("itunes-upload");
+  var music_source = document.getElementById('mp3-player');
+  var url_source = document.getElementById('url-input');
+  var all_list = document.getElementById("all-songs-list");
   var name_input = document.getElementById("name-input");
   var songs_checkform = document.getElementById("songs-checkform");
   var new_playlist_button = document.getElementById("new-playlist");
@@ -11,12 +10,12 @@ $(function() {
   var songs_nocheck = document.getElementById("all-songs-nocheck");
   var songs_withcheck = document.getElementById("all-songs-withcheck");
   var playlists_list = document.getElementById("playlists-list");
-	var current_mp3;
+  var current_mp3;
   var url_songs = {};
-	var all_songs = [];
+  var all_songs = [];
 
 
-	$('#itunes-upload').change(function(){
+  $('#itunes-upload').change(function(){
     if (itunes_mp3.files.length == 0) {
     } else {
       var file = itunes_mp3.files[0];
@@ -24,27 +23,27 @@ $(function() {
     }
   });
 
-	$('#url-submit').click(function() {
-    console.log("url submit top")
-    console.log(player)
-		var url = url_source.value;
+  $('#url-submit').click(function() {
+    var url = url_source.value;
     if (url.substr(url.length - 4) == ".mp3") {
       update_song_url(url);
       var testRE = url.match("[assets|Music]/(.*).mp3");
       song_title = decodeURI(testRE[1])
+      console.log(song_title)
       add_new_song(song_title, url, "mp3");
       $('#url-input').val('');
     } else if (url.substr(32) !== "https://www.youtube.com/watch?v=" || url.substr(31) !== "http://www.youtube.com/watch?v=") {
-      console.log(player)
-      update_yt_url(url);
-      var videoID = decodeURI(url.match("watch?v=/(.*)")[1]);
-      console.log("videoID: "+videoID)
-      add_new_song(song_title, videoID, "youtube");
+      var split_url = url.split('watch?v=');
+      var embed_url = split_url[0]+'embed/'+split_url[1];
+      console.log(embed_url)
+      add_new_song("YouTube test title", embed_url, "youtube");
+      // play_yt_video(url.split('watch?v=')[1]);
+      play_yt_video(embed_url);
       $('#url-input').val('');
     } else {
       console.log("not mp3 or youtube url")
     }
-	});
+  });
 
   $('#all-songs-list').click(function(e) {
     if(e.target && e.target.nodeName == "LI") {
@@ -113,24 +112,19 @@ $(function() {
     });
   }
 
-  update_yt_url = function(ytID) {
-    player.cueVideoById(ytID);
-    player.show();
-  }
-
-	update_song_url = function(url) {
-		current_mp3 = url;
-		all_songs.push(current_mp3);
-		var src = document.createElement("SOURCE");
+  update_song_url = function(url) {
+    current_mp3 = url;
+    all_songs.push(current_mp3);
+    var src = document.createElement("SOURCE");
     src.setAttribute("src", url);
     src.setAttribute("type", "audio/mp3");
     music_source.appendChild(src);
-	}
+  }
 
   update_song_file = function(file) {
-  	current_mp3 = file;
-  	all_songs.push(current_mp3);
-  	music_source.src = file.name;
+    current_mp3 = file;
+    all_songs.push(current_mp3);
+    music_source.src = file.name;
     if ('name' in file) {
       console.log("name: " + file.name);
     }
@@ -141,15 +135,15 @@ $(function() {
 
   add_new_song = function(song_name, song_url, type) {
     url_songs[song_name] = song_url;
-		var new_song = document.createElement('li');
-		new_song.appendChild(document.createTextNode(song_name));
+    var new_song = document.createElement('li');
+    new_song.appendChild(document.createTextNode(song_name));
     var mp3_url = document.createAttribute("url");       
     mp3_url.value = song_url;  
     new_song.setAttributeNode(mp3_url); 
     var url_type = document.createAttribute("url_type");       
     url_type.value = type;  
     new_song.setAttributeNode(url_type); 
-		all_list.appendChild(new_song);
+    all_list.appendChild(new_song);
 
     var song_input = document.createElement("INPUT");
     song_input.setAttribute("type", "checkbox");
@@ -159,7 +153,36 @@ $(function() {
     songs_checkform.appendChild(song_input);
     songs_checkform.appendChild(song_label);
     songs_checkform.appendChild(br);
-	}
-
+  }
 
 });
+
+
+
+var player;
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player('youtube-video', {
+    events: {
+      'onReady': onPlayerReady,
+      'onStateChange': onPlayerStateChange
+    }
+  });
+}
+
+function onPlayerReady() {
+  console.log("player ready");
+  //do whatever you want here. Like, player.playVideo();
+
+}
+function onPlayerStateChange() {
+  console.log("player state changed");
+}
+
+play_yt_video = function(url) {
+  var YTplayer = document.getElementById("youtube-video");
+  YTplayer.style.display = "block";
+  console.log("visible yt player")
+  YTplayer.src=url;
+  console.log("should have set url: "+url)
+}
+
