@@ -134,6 +134,7 @@ $(function() {
   update_mp3_url = function(url) {
     YT_player.style.display = "none";
     mp3_player.style.display = "block";
+    YT_player.pauseVideo();
     current_mp3 = url;
     all_songs.push(current_mp3);
     mp3_player.src = url;
@@ -188,6 +189,7 @@ function onPlayerStateChange() {
 update_yt_video = function(url) {
   var YTplayer = document.getElementById("youtube-video");
   var mp3player = document.getElementById('mp3-player');
+  mp3player.pause();
   YTplayer.style.display = "block";
   mp3player.style.display = "none";
   console.log("visible yt player")
