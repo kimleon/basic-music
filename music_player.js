@@ -18,7 +18,7 @@ $(function() {
   $('#url-submit').click(function() {
     var url = url_source.value;
     if (url.substr(url.length - 4) == ".mp3") {
-      update_song_url(url);
+      update_mp3_url(url);
       var testRE = url.match("[assets|Music]/(.*).mp3");
       song_title = decodeURI(testRE[1])
       console.log(song_title)
@@ -29,14 +29,11 @@ $(function() {
       var embed_url = split_url[0]+'embed/'+split_url[1];
       console.log(embed_url)
       var yt_title;
-      // var q = 'https://www.googleapis.com/youtube/v3/videos?id='+split_url[1]+'&key=AIzaSyAq29wjl5DIIRoBwnDePV6SJXtgcGM-VhQ&fields=items(snippet(title))&part=snippet';
+      // get YouTube video title
       $.getJSON( "https://www.googleapis.com/youtube/v3/videos?part=id%2Csnippet&id="+split_url[1]+"&key=AIzaSyAq29wjl5DIIRoBwnDePV6SJXtgcGM-VhQ", function( data ) {
-       //var obj = $.parseJSON(data);
         yt_title = data.items[0].snippet.localized.title;
-        console.log(embed_url)
-        console.log(yt_title);
         add_new_song(yt_title, embed_url, "youtube");
-        play_yt_video(embed_url);
+        update_yt_video(embed_url);
       });
       
       $('#url-input').val(''); 
@@ -47,15 +44,17 @@ $(function() {
 
   $('#all-songs-list').click(function(e) {
     if(e.target && e.target.nodeName == "LI") {
-      mp3_player.src = e.target.getAttribute('url');
-      console.log(e.target.getAttribute('url') + " was clicked");
+      var url = e.target.getAttribute('url');
+      var url_type = e.target.getAttribute('url_type');
+      song_clicked(url, url_type);
     }
   });
 
   $('#playlists-list').click(function(e) {
     if(e.target && e.target.nodeName == "LI") {
-      mp3_player.src = e.target.getAttribute('url');
-      console.log(e.target.getAttribute('url') + " was clicked");
+      var url = e.target.getAttribute('url');
+      var url_type = e.target.getAttribute('url_type');
+      song_clicked(url, url_type);
     }
   });
 
@@ -105,6 +104,18 @@ $(function() {
     clear_fields();
   });
 
+  song_clicked = function(url, type) {
+    if (type == 'mp3') {
+      update_mp3_url(url);
+    } else if (type == 'youtube') {
+      update_yt_video(url)
+    } else {
+      console.log("neither mp3 nor yt??")
+    }
+    console.log(url)
+    console.log(type)
+  }
+
   clear_fields = function() {
     name_input.value = "";
     $("input:checkbox").each(function () {
@@ -112,7 +123,7 @@ $(function() {
     });
   }
 
-  update_song_url = function(url) {
+  update_mp3_url = function(url) {
     YT_player.style.display = "none";
     mp3_player.style.display = "block";
     current_mp3 = url;
@@ -178,7 +189,7 @@ function onPlayerStateChange() {
   console.log("player state changed");
 }
 
-play_yt_video = function(url) {
+update_yt_video = function(url) {
   var YTplayer = document.getElementById("youtube-video");
   var mp3player = document.getElementById('mp3-player');
   YTplayer.style.display = "block";
