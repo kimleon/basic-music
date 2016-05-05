@@ -28,12 +28,14 @@ $(function() {
       var split_url = url.split('watch?v=');
       var embed_url = split_url[0]+'embed/'+split_url[1];
       console.log(embed_url)
+      var yt_title;
       // var q = 'https://www.googleapis.com/youtube/v3/videos?id='+split_url[1]+'&key=AIzaSyAq29wjl5DIIRoBwnDePV6SJXtgcGM-VhQ&fields=items(snippet(title))&part=snippet';
       $.getJSON( "https://www.googleapis.com/youtube/v3/videos?part=id%2Csnippet&id="+split_url[1]+"&key=AIzaSyAq29wjl5DIIRoBwnDePV6SJXtgcGM-VhQ", function( data ) {
        //var obj = $.parseJSON(data);
-        console.log(data.items[0].snippet.localized.title);
+        yt_title = data.items[0].snippet.localized.title;
+        console.log(yt_title);
       });
-      add_new_song("youtube title placeholder", embed_url, "youtube");
+      add_new_song(yt_title, embed_url, "youtube");
       play_yt_video(embed_url);
       $('#url-input').val(''); 
     } else {
