@@ -74,6 +74,7 @@ $(function() {
     var playlist_songs = [];
     $("input:checkbox:checked").each(function () {
         playlist_songs.push($(this).val());
+        console.log($(this).val())
     });
 
     var title = document.createElement("H4");             
@@ -84,9 +85,10 @@ $(function() {
     for(var i = 0; i < playlist_songs.length; i++) {
       var item = document.createElement('li');
       item.appendChild(document.createTextNode(playlist_songs[i]));
-      var mp3_url = document.createAttribute("url");       
-      mp3_url.value = url_songs[playlist_songs[i]];  
-      item.setAttributeNode(mp3_url); 
+      var song_url = document.createAttribute("url");     
+      var url_type = document.createAttribute("url_type");     
+      song_url.value = url_songs[playlist_songs[i]];  
+      item.setAttributeNode(song_url); 
       playlist_ordered.appendChild(item);
     }
 
