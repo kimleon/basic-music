@@ -33,6 +33,7 @@ $(function() {
         url: q, 
         dataType: "jsonp",
         success: function(data){
+                 console.log(data)
                  var title = data.items[0].snippet.title;
                  console.log(title);
                  add_new_song(title, embed_url, "youtube");           
